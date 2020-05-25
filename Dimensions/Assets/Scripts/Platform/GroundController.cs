@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Random=UnityEngine.Random;
 using System;
 
 public class GroundController : MonoBehaviour
@@ -18,8 +19,8 @@ public class GroundController : MonoBehaviour
 	
 	[Header("Start Platforms")]
 	public PlatformController[] startPlatforms;
-			
-	private UnityEngine.Random random = new UnityEngine.Random();
+	
+	public GameObject defaultCloud;
 
     void Start()
     {
@@ -29,16 +30,20 @@ public class GroundController : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 	
-	private void createRandomPlatform(){
-		
+	public void CreateRandomCloud(){
+		CloudController test = defaultCloud.GetComponent<CloudController>();
+		test.isStatic = false;
+		int xDirPos = (Random.value * 10 < 5) ? 1 : -1;
+		int zDirPos = (Random.value * 10 < 5) ? 1 : -1;
+		test.direction = new Vector3(xDirPos * Random.value * 100 + 20, 0, zDirPos * Random.value * 100 + 20);
+		CreatePlatform(defaultCloud, (int)(-1 * xDirPos * Random.value * (maxSize / tileSize)), (int) (-1 * zDirPos * Random.value * (maxSize / tileSize)));
 	}
 	
-	private void createPlatform(NavMeshSurface platform, int x, int z){
-		NavMeshSurface instance = Instantiate(platform, new Vector3(x * tileSize, 0, z * tileSize), Quaternion.identity);
-		
+	private void CreatePlatform(GameObject platform, int x, int z){
+		GameObject instance = Instantiate(platform, new Vector3(x * tileSize, 0, z * tileSize), Quaternion.identity, transform);
 	}
 
 }

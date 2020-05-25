@@ -25,9 +25,13 @@ public class PlatformController : MonoBehaviour, Destructable
 		if(collision.gameObject != null){
 			PlatformController collisionPlatformController = collision.gameObject.GetComponent<PlatformController>();
 			if(collisionPlatformController != null){
-				if(!isStatic)
-					UpdateNavMesh();
+				bool oldIsStatic = isStatic;
+				
 				isStatic = true;
+				GetComponent<Rigidbody>().isKinematic = true;
+				
+				if(!oldIsStatic)
+					UpdateNavMesh();
 			}
 		}
 	}
@@ -46,6 +50,7 @@ public class PlatformController : MonoBehaviour, Destructable
 	private void UpdateNavMesh(){
 		NavMesh.RemoveAllNavMeshData();
 		navMeshSurface.BuildNavMesh();
+		PlayerController.RefreshNavMeshAgent();
 	}
 	
 }

@@ -18,6 +18,6 @@ public class CloudController : PlatformController
     {
 		base.Update();
 		if(!base.isStatic)
-			transform.position += direction.normalized * Time.deltaTime;
+			transform.position += direction.normalized * 4 * Time.deltaTime;
     }
 }

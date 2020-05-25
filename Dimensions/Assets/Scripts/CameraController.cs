@@ -50,7 +50,7 @@ public class CameraController : MonoBehaviour
 	private void handleRotation(Vector3 center){
 		if (shouldTurnCamera){
 			shouldTurnCamera = false;
-			transform.RotateAround(center, Vector3.up, 90);
+			transform.RotateAround(center, -Vector3.up, 90);
 		}
 	}
 }
