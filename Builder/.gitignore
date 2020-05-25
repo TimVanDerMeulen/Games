@@ -1,0 +1,14 @@
+.vs/
+Assembly*
+Library/
+Logs/
+Packages/
+ProjectSettings/
+Temp/
+obj/
+Builder.sln
+Assets/*
+!Assets/Scenes/
+!Assets/Usable/
+!Assets/Scripts/
+**/**/*.meta
