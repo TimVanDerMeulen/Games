@@ -14,7 +14,7 @@ public class PlatformController : MonoBehaviour, Destructable
 
     void Update()
     {
-        rigidbody.AddForce(new Vector3(1,0,1).normalized);
+        //rigidbody.AddForce(new Vector3(1,0,1).normalized);
     }
 	
 	public void Destroy(){
