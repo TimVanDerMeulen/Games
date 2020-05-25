@@ -1,24 +1,51 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlatformController : MonoBehaviour, Destructable
 {
 	
-	private Rigidbody rigidbody;
+	public bool isStatic = false;
 	
-    void Start()
+	private NavMeshSurface navMeshSurface;
+	
+    public void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+		navMeshSurface = GetComponent<NavMeshSurface>();
+        //UpdateNavMesh();
     }
 
-    void Update()
+    public void Update()
     {
-        //rigidbody.AddForce(new Vector3(1,0,1).normalized);
+		
     }
 	
+	public void OnCollisionEnter(Collision collision){
+		if(collision.gameObject != null){
+			PlatformController collisionPlatformController = collision.gameObject.GetComponent<PlatformController>();
+			if(collisionPlatformController != null){
+				if(!isStatic)
+					UpdateNavMesh();
+				isStatic = true;
+			}
+		}
+	}
+	
+	public void OnCollisionExit(Collision collision){
+		if(true) //TODO check if other collision still up
+			UpdateNavMesh();
+		else
+			Destroy(); 
+	}
+	
 	public void Destroy(){
-		
+		//TODO start animation and drop down
+	}
+	
+	private void UpdateNavMesh(){
+		NavMesh.RemoveAllNavMeshData();
+		navMeshSurface.BuildNavMesh();
 	}
 	
 }

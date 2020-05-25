@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using System;
 
 public class GroundController : MonoBehaviour
@@ -15,14 +16,15 @@ public class GroundController : MonoBehaviour
 	public int maxSize;
 	public int tileSize; // always squared even if tile itself isn't!
 	
-	private GameObject[,] groundField;
-		
+	[Header("Start Platforms")]
+	public PlatformController[] startPlatforms;
+			
 	private UnityEngine.Random random = new UnityEngine.Random();
-	private List<GameObject> platforms;
 
     void Start()
     {
-		groundField = new GameObject[maxSize, maxSize];
+		NavMesh.RemoveAllNavMeshData();
+		startPlatforms[0].GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     void Update()
@@ -34,8 +36,9 @@ public class GroundController : MonoBehaviour
 		
 	}
 	
-	private void createPlatform(GameObject platform, int x, int z){
-		Instantiate(platform, new Vector3(x * tileSize, 0, z * tileSize), Quaternion.identity);
+	private void createPlatform(NavMeshSurface platform, int x, int z){
+		NavMeshSurface instance = Instantiate(platform, new Vector3(x * tileSize, 0, z * tileSize), Quaternion.identity);
+		
 	}
 
 }
