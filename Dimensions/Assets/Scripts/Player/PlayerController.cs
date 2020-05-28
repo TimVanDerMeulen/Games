@@ -5,15 +5,17 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour {
 	
+	private static bool shouldRefreshNavAgent;
 	public static void RefreshNavMeshAgent(){
-		walkMotion.Refresh();
+		shouldRefreshNavAgent = true;
 	}
 	
 	private Camera camera;
 	private NavMeshAgent agent;
+	private Vector3 destination;
 	
-	private static WalkMotion walkMotion = new WalkMotion();
-	    
+	private bool walking = false;
+		    
 	void Start() {		
 		camera = Camera.main;
 	
@@ -21,33 +23,28 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void Update() {
+		if(shouldRefreshNavAgent) {
+			shouldRefreshNavAgent = false;
+			RefreshNavMesh();
+		}
 		if (Input.GetMouseButtonDown(1)) {
 			RaycastHit hit;
 
 			Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out hit)) {
-				walkMotion.SetDestinationForAgent(hit.point, agent);
+				destination = hit.point;
+				walking = true;
+				RefreshNavMesh();
 				return;
 			}
 		}		
+		if(walking && Vector3.Distance(transform.position, destination) < 0.3)
+			walking = false;
+	}
+	
+	private void RefreshNavMesh(){
+		if(walking && destination != null)
+			agent.SetDestination(destination);
 	}
 
-}
-
-class WalkMotion {
-	
-	private Vector3 destination;
-	private NavMeshAgent agent;
-	
-	public void SetDestinationForAgent(Vector3 destination, NavMeshAgent agent){
-		this.destination = destination;
-		this.agent = agent;
-		
-		Refresh();
-	}
-	
-	public void Refresh(){
-		agent.SetDestination(destination);
-	}
-	
 }

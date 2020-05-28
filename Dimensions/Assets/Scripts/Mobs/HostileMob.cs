@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Destructable
+public interface HostileMob : Mob
 {
-    void SelfDestruct();
+	string GetName();
+    //float GetHealth();
 }

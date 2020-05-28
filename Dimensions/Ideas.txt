@@ -10,3 +10,5 @@ plattformen sind wolken
 - wolken werden zu schwer und regnen ab, wenn zu viele direkt verbunden
 plattformen können mit brücken verbunden werden, um sie zu behalten
 wolken werden mit wolkenmaschine erstellt
+- gremlins bauen schadhaftes drauf
+- allies bauen hilfe drauf

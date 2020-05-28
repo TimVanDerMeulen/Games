@@ -40,14 +40,14 @@ public class CameraController : MonoBehaviour
 			center = groundRenderer.bounds.center;
 		}
 		
-		handleRotation(center);
+		handleCameraTurn(center);
 	}
 	
 	public void turnCamera(){
 		this.shouldTurnCamera = true;
 	}
 	
-	private void handleRotation(Vector3 center){
+	private void handleCameraTurn(Vector3 center){
 		if (shouldTurnCamera){
 			shouldTurnCamera = false;
 			transform.RotateAround(center, -Vector3.up, 90);

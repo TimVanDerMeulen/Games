@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Destructable
+public interface NeutralMob : Mob
 {
-    void SelfDestruct();
+    
 }
