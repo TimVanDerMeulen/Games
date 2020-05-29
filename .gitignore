@@ -10,4 +10,5 @@
 !**/Assets/Scenes/
 !**/Assets/Usable/
 !**/Assets/Scripts/
+!**/Assets/Prefabs/
 **/**/*.meta
