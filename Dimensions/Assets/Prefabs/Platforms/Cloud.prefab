@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 1112051537577779863}
   - component: {fileID: 2638682720444955093}
   - component: {fileID: 2638682720444955094}
+  - component: {fileID: 4307538600393696813}
   m_Layer: 0
-  m_Name: hex (11)
+  m_Name: Cloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,13 +29,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6322938299338096126}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 13, y: 50.142967, z: 24}
   m_LocalScale: {x: 10, y: 10, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &2071595930936391131
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -143,3 +144,15 @@ MonoBehaviour:
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: 39904046ae0165e408f4742ba14f4103, type: 2}
+--- !u!114 &4307538600393696813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6322938299338096126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38dff37da33b38f4fa20b9db333b3e49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

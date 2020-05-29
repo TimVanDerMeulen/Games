@@ -43,7 +43,7 @@ public class EntityManager : MonoBehaviour
 	}
 	
 	public static GameObject CreateInstanceOf(GameObject prefab, Vector3 pos){
-		return EntityManager.CreateInstanceOf(prefab, pos, Quaternion.identity, null);
+		return EntityManager.CreateInstanceOf(prefab, pos, prefab.transform.rotation, null);
 	}
 	
 	public static GameObject CreateInstanceOf(GameObject prefab, Vector3 pos, Quaternion rot, Transform parent){

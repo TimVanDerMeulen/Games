@@ -12,10 +12,13 @@ public class GroundGenerator {
 	Ground Settings
 	*/
 	[Header("Dimensions")]
-	public int maxSize;
-	public int tileSize; // always squared even if tile itself isn't!
+	[Tooltip("How many Platforms may appear?")]
+	public int maxAmount;
+	[Tooltip("How big is the area the platforms can spawn in?")]
+	public float maxSize;
 	
 	[Header("Prefab Settings")]
+	[Tooltip("Base of all the platforms")]
 	public GameObject defaultCloud;
 	[Tooltip("All possibleclouds")]
 	public List<GameObject> allRandomPlatforms;
@@ -37,21 +40,17 @@ public class GroundGenerator {
 	
 	private List<PlatformSpawnAnimation> spawnAnimations = new List<PlatformSpawnAnimation>();
 	
+	private Vector3 tileSize;
+	
 	public void SetGroundRootTransform(Transform groundRootTransform){
 		this.groundRootTransform = groundRootTransform;
 	}
 	
 	public void Init(){
-		freeSpaces = new List<Vector3>();
+		Renderer platformRenderer = defaultCloud.GetComponent<Renderer>();
+		tileSize = platformRenderer.bounds.size;
 		
-		int amount = maxSize / tileSize;
-		float halfSize = maxSize / 2;
-		
-		for(int i=0;i<amount;i++){
-			for(int e=0;e<amount;e++){
-				FreeSpace(new Vector3(i * tileSize - halfSize, 0, e * tileSize - halfSize));
-			}
-		}
+		CalculateFreeSpaces();
 	}
 	
 	public void GeneratePlatform(){
@@ -66,13 +65,13 @@ public class GroundGenerator {
 		// make platform move straight up to target position
 		Vector3 spawnPos = GetSpawnPos(targetPosition);
 		
-		GameObject platform = EntityManager.CreateInstanceOf(prefab, spawnPos, Quaternion.identity, groundRootTransform);
+		GameObject platform = EntityManager.CreateInstanceOf(prefab, spawnPos, prefab.transform.rotation, groundRootTransform);
 		if(freeSpaces.Contains(targetPosition)){
 			freeSpaces.Remove(targetPosition);
 		
 			// setup freeing of space after selfdestruct
 			PlatformController platformController = platform.GetComponent<PlatformController>();		
-			platformController.AddSelfDestructListener(() => this.FreeSpace(targetPosition));
+			platformController.AddSelfDestructListener(() => this.AddFreeSpace(targetPosition));
 		}
 		
 		return platform;
@@ -106,7 +105,7 @@ public class GroundGenerator {
 	
 	private void GenerateIfRateTimePassed(){
 		timer += Time.deltaTime;
-		if(timer > generationRate && (!dynamicGenerationRate || timer > generationRate + maxSize - freeSpaces.Count)){
+		if(timer > generationRate && (!dynamicGenerationRate || timer > generationRate + maxAmount - freeSpaces.Count)){
 			timer = 0.0f;
 			if(HasFreeSpace()){
 				GeneratePlatform();
@@ -136,10 +135,25 @@ public class GroundGenerator {
 		return new Vector3(destination.x, spawnHeight, destination.z);
 	}
 	
-	private void FreeSpace(Vector3 pos){
+	private void AddFreeSpace(Vector3 pos){
 		// maybe recalc y to randomise height again
 		//pos.y = 0; //TODO add variance in height
 		freeSpaces.Add(pos);
+	}
+	
+	// currently calculating hex positioning
+	private void CalculateFreeSpaces(){
+		freeSpaces = new List<Vector3>();
+		
+		//int amount = (int)(maxSize / tileSize.x + maxSize / tileSize.z);
+		float amountX = maxSize / tileSize.x;
+		float amountZ = maxSize / tileSize.z;
+		
+		for(float i=0;i<amountX;i++){
+			for(float e=0;e<amountZ;e++){
+				AddFreeSpace(new Vector3(i * tileSize.x - (maxSize/2) + (e%2)*(tileSize.x / 2), 0, e * tileSize.z * 3/4 - (maxSize/2)));
+			}
+		}
 	}
 	
 	private class PlatformSpawnAnimation {
