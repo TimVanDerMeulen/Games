@@ -33,6 +33,7 @@ public class GroundGenerator {
 	
 	// x, y, height in cloud grid
 	private List<Vector3> freeSpaces;
+	private int maxFreeSpaces;
 	
 	private Transform groundRootTransform;
 	
@@ -41,6 +42,12 @@ public class GroundGenerator {
 	private List<PlatformSpawnAnimation> spawnAnimations = new List<PlatformSpawnAnimation>();
 	
 	private Vector3 tileSize;
+	
+	private Action updateNavMesh;
+	
+	public void SetUpdateNavMeshAction(Action updateNavMesh){
+		this.updateNavMesh = updateNavMesh;
+	}
 	
 	public void SetGroundRootTransform(Transform groundRootTransform){
 		this.groundRootTransform = groundRootTransform;
@@ -52,6 +59,11 @@ public class GroundGenerator {
 		
 		CalculateFreeSpaces();
 	}
+		
+	public void Update(){
+		GenerateIfRateTimePassed();			
+		HandleAnimations();
+	}
 	
 	public void GeneratePlatform(){
 		GameObject platform = GetRandomPlatform();
@@ -59,6 +71,8 @@ public class GroundGenerator {
 		
 		GameObject platformInstance = GeneratePlatform(platform, targetPosition);
 		AddToAnimations(platformInstance, targetPosition);
+		
+		timer = 0.0f;
 	}
 	
 	public GameObject GeneratePlatform(GameObject prefab, Vector3 targetPosition){
@@ -93,27 +107,12 @@ public class GroundGenerator {
 		return freeSpaces.Count > 0;
 	}
 	
-	public void Update(){
-		GenerateIfRateTimePassed();			
-		HandleAnimations();
-	}
-	
-	public void UpdateNavMesh(GameObject platform){
-		PlatformController controller = platform.GetComponent<PlatformController>();
-		controller.UpdateNavMesh();
-	}
-	
-	private void GenerateIfRateTimePassed(){
-		timer += Time.deltaTime;
-		if(timer > generationRate && (!dynamicGenerationRate || timer > generationRate + maxAmount - freeSpaces.Count)){
-			timer = 0.0f;
-			if(HasFreeSpace()){
-				GeneratePlatform();
-			}
-		}
-	}
-	
-	private void HandleAnimations(){
+	//public void UpdateNavMesh(GameObject platform){
+	//	PlatformController controller = platform.GetComponent<PlatformController>();
+	//	controller.UpdateNavMesh();
+	//}
+		
+	public void HandleAnimations(){
 		List<PlatformSpawnAnimation> temp = new List<PlatformSpawnAnimation>();
 		temp.AddRange(spawnAnimations);
 		
@@ -124,11 +123,23 @@ public class GroundGenerator {
 			if(anim.Done()){
 				spawnAnimations.Remove(anim);
 				updateMesh = true;
-				target = anim.target;
 			}
 		}
-		if(updateMesh)
-			UpdateNavMesh(target);
+		if(updateMesh && this.updateNavMesh != null)
+			this.updateNavMesh();
+	}
+	
+	private void GenerateIfRateTimePassed(){
+		if(maxAmount <= (maxFreeSpaces - freeSpaces.Count))
+			return;
+		
+		timer += Time.deltaTime;
+		if(timer > generationRate && (!dynamicGenerationRate || timer > generationRate + maxAmount - freeSpaces.Count)){
+			timer = 0.0f;
+			if(HasFreeSpace()){
+				GeneratePlatform();
+			}
+		}
 	}
 	
 	private Vector3 GetSpawnPos(Vector3 destination){
@@ -154,6 +165,7 @@ public class GroundGenerator {
 				AddFreeSpace(new Vector3(i * tileSize.x - (maxSize/2) + (e%2)*(tileSize.x / 2), 0, e * tileSize.z * 3/4 - (maxSize/2)));
 			}
 		}
+		maxFreeSpaces = freeSpaces.Count;
 	}
 	
 	private class PlatformSpawnAnimation {

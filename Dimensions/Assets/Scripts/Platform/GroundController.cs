@@ -11,16 +11,20 @@ public class GroundController : MonoBehaviour
 	public GroundGenerator groundGenerator = new GroundGenerator();
 
 	private bool started = false;
+	private NavMeshSurface navMeshSurface;
 
     void Start()
     {
-		
+		navMeshSurface = GetComponent<NavMeshSurface>();
     }
 
     void Update()
     {
-		if(!started)
+		if(!started){
+			//still handle manually added platform animations
+			groundGenerator.HandleAnimations();
 			return;
+		}
 		
 		groundGenerator.Update();
     }
@@ -28,6 +32,7 @@ public class GroundController : MonoBehaviour
 	public void Init(){
 		groundGenerator.SetGroundRootTransform(transform);
 		groundGenerator.Init();
+		groundGenerator.SetUpdateNavMeshAction(() => this.UpdateNavMesh());
 		
 		GameObject startPlatform = CreateStartPlatform();
 		PlatformController platformController = startPlatform.GetComponent<PlatformController>();
@@ -48,6 +53,11 @@ public class GroundController : MonoBehaviour
 		groundGenerator.AddToAnimations(platform, pos);
 		
 		return platform;
+	}
+	
+	private void UpdateNavMesh(){
+		navMeshSurface.BuildNavMesh();
+		//PlayerController.RefreshNavMeshAgent();	
 	}
 
 }

@@ -9,12 +9,9 @@ public class PlatformController : MonoBehaviour, Destructable
 	private List<Action> onSelfDestruct = new List<Action>();
 	private List<Action> onDestinationReached = new List<Action>();
 	
-	private NavMeshSurface navMeshSurface;
-	
     public void Start()
     {
-		navMeshSurface = GetComponent<NavMeshSurface>();
-        //UpdateNavMesh();
+		
     }
 
     public void Update()
@@ -62,12 +59,6 @@ public class PlatformController : MonoBehaviour, Destructable
 			action();
 			
 		//TODO start animation and drop down
-	}
-	
-	public void UpdateNavMesh(){
-		NavMesh.RemoveAllNavMeshData();
-		navMeshSurface.BuildNavMesh();
-		PlayerController.RefreshNavMeshAgent();
 	}
 	
 }
