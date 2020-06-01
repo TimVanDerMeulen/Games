@@ -66,6 +66,9 @@ public class GroundGenerator {
 	}
 	
 	public void GeneratePlatform(){
+		if(!HasFreeSpace())
+			return;
+		
 		GameObject platform = GetRandomPlatform();
 		Vector3 targetPosition = GetFreePlatformPosition();
 		
@@ -158,7 +161,7 @@ public class GroundGenerator {
 		
 		//int amount = (int)(maxSize / tileSize.x + maxSize / tileSize.z);
 		float amountX = maxSize / tileSize.x;
-		float amountZ = maxSize / tileSize.z;
+		float amountZ = maxSize / (tileSize.z * 3/4);
 		
 		for(float i=0;i<amountX;i++){
 			for(float e=0;e<amountZ;e++){
