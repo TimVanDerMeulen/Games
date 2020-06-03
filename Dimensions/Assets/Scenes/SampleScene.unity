@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 106730468}
   - component: {fileID: 106730462}
   - component: {fileID: 106730469}
+  - component: {fileID: 106730470}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -228,10 +229,10 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 106730461}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 968485193}
 --- !u!114 &106730463
@@ -559,6 +560,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &106730470
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106730461}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3564018, y: 0.28942832, z: 1}
+  m_Center: {x: 0.5519888, y: -0.09605746, z: -0.5}
 --- !u!1 &154553437
 GameObject:
   m_ObjectHideFlags: 0
@@ -2285,7 +2299,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh13730
+  m_Name: pb_Mesh13744
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3180,7 +3194,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1647624313
 MeshRenderer:
@@ -3795,7 +3809,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 963194227}
-  m_PlaneDistance: 10
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -3952,7 +3966,7 @@ PrefabInstance:
     - target: {fileID: 1632824275582926220, guid: faeb335d839d8a54595800e52da1c774,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1632824275582926220, guid: faeb335d839d8a54595800e52da1c774,
         type: 3}

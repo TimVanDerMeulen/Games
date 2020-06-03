@@ -10,16 +10,14 @@ public class PartiallyHideable : MonoBehaviour
 	[Tooltip("Are the objects visible at the start?")]
 	public bool visible = true;
 	
-	public bool log = false;
-	
+	[Range(0, 1)]
+	public float transparency = 0.4f;
+
 	private int colliderCounter = 0;
 	
 	void Update(){
 		if(this.visible == (colliderCounter > 0))
 			ToggleVisibility(colliderCounter > 0);
-		
-		if(log)
-			Debug.Log(this.visible + "," + this.colliderCounter);
 	}
 	
     void OnTriggerEnter(Collider collider)
@@ -53,7 +51,7 @@ public class PartiallyHideable : MonoBehaviour
 		var renderers = gameObject.GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in renderers){
 			Color color = r.material.color;
-			color.a = hide ? 0.2f : 1f;
+			color.a = hide ? transparency : 1f;
 			r.material.color = color;//enabled = !hide;
 		}
 		this.visible = !hide;
