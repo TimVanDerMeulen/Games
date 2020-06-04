@@ -9,7 +9,7 @@ using Random=UnityEngine.Random;
 public class GroundGenerator {
 	
 	/*
-	Ground Settings
+		Ground Settings
 	*/
 	[Header("Dimensions")]
 	[Tooltip("How many Platforms may appear?")]
@@ -29,10 +29,18 @@ public class GroundGenerator {
 	[Tooltip("Slow down generation rate depending on amount of existing platforms")]
 	public bool dynamicGenerationRate;
 	
+	public int amountOfGroups;
+	[Range(0,1)]
+	public float chanceToRisePlatform;
+	public float risenPlatformHeight;
+	
 	public float spawnHeight;
 	
-	// x, y, height in cloud grid
-	private List<Vector3> freeSpaces;
+	/*
+		privates
+	*/
+	
+	private List<PlatformGroup> platformGroups;
 	private int maxFreeSpaces;
 	
 	private Transform groundRootTransform;
@@ -60,7 +68,23 @@ public class GroundGenerator {
 		CalculateFreeSpaces();
 	}
 		
+		
+		//private int t = 0;
 	public void Update(){
+		// spawn groups at once
+		//timer += Time.deltaTime;
+		//
+		//if(timer > 5 && t<platformGroups.Count){
+		//	while(platformGroups[t].HasFreeSpace()){
+		//		GameObject platform = GetRandomPlatform();
+		//		Vector3 targetPosition = platformGroups[t].GetRandomFreeSpace();
+		//		GameObject platformInstance = GeneratePlatform(platform, targetPosition);
+		//		AddToAnimations(platformInstance, targetPosition);
+		//	}
+		//	t++;
+		//	timer = 0f;
+		//}
+		
 		GenerateIfRateTimePassed();			
 		HandleAnimations();
 	}
@@ -71,7 +95,6 @@ public class GroundGenerator {
 		
 		GameObject platform = GetRandomPlatform();
 		Vector3 targetPosition = GetFreePlatformPosition();
-		
 		GameObject platformInstance = GeneratePlatform(platform, targetPosition);
 		AddToAnimations(platformInstance, targetPosition);
 		
@@ -83,12 +106,13 @@ public class GroundGenerator {
 		Vector3 spawnPos = GetSpawnPos(targetPosition);
 		
 		GameObject platform = EntityManager.CreateInstanceOf(prefab, spawnPos, prefab.transform.rotation, groundRootTransform);
-		if(freeSpaces.Contains(targetPosition)){
-			freeSpaces.Remove(targetPosition);
+		PlatformGroup pg = GetGroupForSpace(targetPosition);
+		if(pg.IsFree(targetPosition)){
+			pg.UseSpace(targetPosition, platform);
 		
 			// setup freeing of space after selfdestruct
 			PlatformController platformController = platform.GetComponent<PlatformController>();		
-			platformController.AddSelfDestructListener(() => this.AddFreeSpace(targetPosition));
+			platformController.AddSelfDestructListener(() => pg.FreeSpace(targetPosition));
 		}
 		
 		return platform;
@@ -103,17 +127,15 @@ public class GroundGenerator {
 	}
 	
 	public Vector3 GetFreePlatformPosition(){
-		return freeSpaces[(int)(Random.value * freeSpaces.Count)];
+		return platformGroups[(int)(Random.value * platformGroups.Count)].GetRandomFreeSpace();
 	}
 	
 	public bool HasFreeSpace(){
-		return freeSpaces.Count > 0;
+		foreach(PlatformGroup pg in platformGroups)
+			if(pg.HasFreeSpace())
+				return true;
+		return false;
 	}
-	
-	//public void UpdateNavMesh(GameObject platform){
-	//	PlatformController controller = platform.GetComponent<PlatformController>();
-	//	controller.UpdateNavMesh();
-	//}
 		
 	public void HandleAnimations(){
 		List<PlatformSpawnAnimation> temp = new List<PlatformSpawnAnimation>();
@@ -133,11 +155,12 @@ public class GroundGenerator {
 	}
 	
 	private void GenerateIfRateTimePassed(){
-		if(maxAmount <= (maxFreeSpaces - freeSpaces.Count))
+		int freeSpacesCount = GetFreeSpacesCount();
+		if(maxAmount <= (maxFreeSpaces - freeSpacesCount))
 			return;
 		
 		timer += Time.deltaTime;
-		if(timer > generationRate && (!dynamicGenerationRate || timer > generationRate + maxAmount - freeSpaces.Count)){
+		if(timer > generationRate && (!dynamicGenerationRate || timer > (generationRate + maxAmount - (maxFreeSpaces - freeSpacesCount)))){
 			timer = 0.0f;
 			if(HasFreeSpace()){
 				GeneratePlatform();
@@ -145,30 +168,96 @@ public class GroundGenerator {
 		}
 	}
 	
+	private int GetFreeSpacesCount(){
+		int res = 0;
+		foreach(PlatformGroup pg in platformGroups)
+			res += pg.GetFreeSpacesCount();
+		return res;
+	}
+	
 	private Vector3 GetSpawnPos(Vector3 destination){
 		return new Vector3(destination.x, spawnHeight, destination.z);
 	}
 	
-	private void AddFreeSpace(Vector3 pos){
-		// maybe recalc y to randomise height again
-		//pos.y = 0; //TODO add variance in height
-		freeSpaces.Add(pos);
+	// calculating hex positioning with grouping
+	private void CalculateFreeSpaces(){
+		List<Vector3> availableSpacesToGroup = CalcAllPossibleSpaces();
+		maxFreeSpaces = availableSpacesToGroup.Count;
+		
+		List<PlatformGroup> groups = GroupSpaces(availableSpacesToGroup);
+		platformGroups = groups;
 	}
 	
-	// currently calculating hex positioning
-	private void CalculateFreeSpaces(){
-		freeSpaces = new List<Vector3>();
+	private List<PlatformGroup> GroupSpaces(List<Vector3> availableSpacesToGroup){
+		List<PlatformGroup> groups = new List<PlatformGroup>();
 		
-		//int amount = (int)(maxSize / tileSize.x + maxSize / tileSize.z);
+		if(amountOfGroups < 1)
+			amountOfGroups = 1;
+		
+		int maxBaseGroupSize = (int)(availableSpacesToGroup.Count/amountOfGroups);
+		
+		Dictionary<PlatformGroup, bool> platformRisen = new Dictionary<PlatformGroup, bool>();
+		
+		float maxDistance = 1.5f * tileSize.magnitude;
+		
+		for(float j=0;j<amountOfGroups;j++){
+			PlatformGroup pg = new PlatformGroup();
+			groups.Add(pg);
+			platformRisen.Add(pg, (Random.value * 1) < chanceToRisePlatform);
+		
+			int size = 1;
+			Vector3 center = availableSpacesToGroup[(int)(Random.value * availableSpacesToGroup.Count)];
+			availableSpacesToGroup.Remove(center);
+			for(int i=0; i < availableSpacesToGroup.Count; i++){
+				if(maxBaseGroupSize <= size)
+						break;
+				
+				if(Vector3.Distance(center, availableSpacesToGroup[i]) <= maxDistance){
+					Vector3 v = availableSpacesToGroup[i];
+					availableSpacesToGroup.Remove(v);
+					i--;
+					
+					v.y = platformRisen[pg] ? risenPlatformHeight : 0;
+					pg.AddSpace(v);
+					size++;
+				}
+			}
+		}
+		
+		foreach(PlatformGroup pg in groups)
+			Debug.Log(pg.GetFreeSpacesCount());
+		
+		while(maxAmount > (maxFreeSpaces - availableSpacesToGroup.Count) && availableSpacesToGroup.Count > 0){
+			//TODO not do bs
+			Vector3 space = availableSpacesToGroup[0];
+			int randomGroupIndex = (int)(Random.value * groups.Count);
+			//Debug.Log(randomGroupIndex);
+			groups[randomGroupIndex].AddSpace(space);
+			availableSpacesToGroup.Remove(space);
+		}
+		
+		return groups;
+	}
+	
+	private List<Vector3> CalcAllPossibleSpaces(){
 		float amountX = maxSize / tileSize.x;
 		float amountZ = maxSize / (tileSize.z * 3/4);
 		
+		List<Vector3> availableSpacesToGroup = new List<Vector3>();
+		
 		for(float i=0;i<amountX;i++){
 			for(float e=0;e<amountZ;e++){
-				AddFreeSpace(new Vector3(i * tileSize.x - (maxSize/2) + (e%2)*(tileSize.x / 2), 0, e * tileSize.z * 3/4 - (maxSize/2)));
+				availableSpacesToGroup.Add(new Vector3(i * tileSize.x - (maxSize/2) + (e%2)*(tileSize.x / 2), 0, e * tileSize.z * 3/4 - (maxSize/2)));
 			}
 		}
-		maxFreeSpaces = freeSpaces.Count;
+		return availableSpacesToGroup;
+	}
+	
+	private PlatformGroup GetGroupForSpace(Vector3 space){
+		foreach(PlatformGroup pg in platformGroups)
+			if(pg.ContainsSpace(space))
+				return pg;
+		throw new ArgumentException("Space not found: " + space);
 	}
 	
 	private class PlatformSpawnAnimation {
@@ -203,6 +292,61 @@ public class GroundGenerator {
 		public bool Done(){
 			return done;
 		}
+	}
+	
+	private class PlatformGroup {
+		private List<Vector3> freeSpaces = new List<Vector3>();
+		private Dictionary<Vector3, GameObject> usedSpaces = new Dictionary<Vector3, GameObject>();
+		
+		public void AddSpace(Vector3 space){
+			if(ContainsSpace(space))
+				return;
+			
+			freeSpaces.Add(space);
+		}
+		
+		public bool HasFreeSpace(){
+			return freeSpaces.Count > 0;
+		}
+		
+		public int GetFreeSpacesCount(){
+			return freeSpaces.Count;
+		}
+		
+		public Vector3 GetRandomFreeSpace(){
+			return freeSpaces[(int)(Random.value * freeSpaces.Count)];
+		}
+		
+		public void UseSpace(Vector3 space, GameObject platform){
+			if(usedSpaces.ContainsKey(space))
+				throw new InvalidOperationException("This space is already in use!");
+			
+			if(!freeSpaces.Contains(space))
+				throw new InvalidOperationException("This space is not available in this group!");
+			
+			freeSpaces.Remove(space);
+			usedSpaces.Add(space, platform);
+		}
+		
+		public void FreeSpace(Vector3 space) {
+			if(freeSpaces.Contains(space))
+				return; // nothing to do
+			
+			if(usedSpaces.ContainsKey(space))
+				throw new InvalidOperationException("This space is not available in this group!");
+			
+			usedSpaces[space].GetComponent<PlatformController>().SelfDestruct();
+			freeSpaces.Add(space);
+		}
+		
+		public bool ContainsSpace(Vector3 space){
+			return freeSpaces.Contains(space) || usedSpaces.ContainsKey(space);
+		}
+		
+		public bool IsFree(Vector3 space){
+			return freeSpaces.Contains(space);
+		}
+		
 	}
 
 }
