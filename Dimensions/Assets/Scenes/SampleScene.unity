@@ -2292,7 +2292,7 @@ MonoBehaviour:
   ground: {fileID: 1647624311}
   maxDistance: 350
   minDistance: 20
-  angle: {x: 0, y: 2, z: 1}
+  angle: {x: 0, y: 3, z: 2}
 --- !u!43 &968485193
 Mesh:
   m_ObjectHideFlags: 0
@@ -3023,7 +3023,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.6, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -20}
+  m_AnchoredPosition: {x: 0, y: -20.000008}
   m_SizeDelta: {x: 0, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1524300320
@@ -3247,8 +3247,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundGenerator:
-    maxAmount: 42
-    maxSize: 100
+    maxAmount: 100
+    maxSize: 150
     defaultCloud: {fileID: 6322938299338096126, guid: 8006879b1bc02ff4e8c668c16b60bc8c,
       type: 3}
     allRandomPlatforms:
@@ -3256,7 +3256,10 @@ MonoBehaviour:
     - {fileID: 2965663108412193927, guid: d00f57ac40954bc45859d9ee3b922418, type: 3}
     - {fileID: 5243596745518593956, guid: 1b90bf7fe15fefa438bf6778ceb97e9c, type: 3}
     generationRate: 1
-    dynamicGenerationRate: 1
+    dynamicGenerationRate: 0
+    amountOfGroups: 12
+    chanceToRisePlatform: 0.672
+    risenPlatformHeight: 15
     spawnHeight: -20
 --- !u!114 &1647624315
 MonoBehaviour:

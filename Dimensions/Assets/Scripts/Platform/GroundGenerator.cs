@@ -93,8 +93,15 @@ public class GroundGenerator {
 		if(!HasFreeSpace())
 			return;
 		
-		GameObject platform = GetRandomPlatform();
 		Vector3 targetPosition = GetFreePlatformPosition();
+		GeneratePlatform(targetPosition);
+	}
+	
+	public void GeneratePlatform(Vector3 targetPosition){
+		if(!HasFreeSpace())
+			return;
+		
+		GameObject platform = GetRandomPlatform();
 		GameObject platformInstance = GeneratePlatform(platform, targetPosition);
 		AddToAnimations(platformInstance, targetPosition);
 		
@@ -152,6 +159,14 @@ public class GroundGenerator {
 		}
 		if(updateMesh && this.updateNavMesh != null)
 			this.updateNavMesh();
+	}
+	
+	public void SpawnGroup(Vector3 space){
+		PlatformGroup pg = GetGroupForSpace(space);
+		
+		while(pg.HasFreeSpace()){
+			GeneratePlatform(pg.GetRandomFreeSpace());
+		}
 	}
 	
 	private Vector3 GetFreePlatformPosition(List<PlatformGroup> available){

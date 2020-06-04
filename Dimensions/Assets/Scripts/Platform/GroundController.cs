@@ -36,7 +36,13 @@ public class GroundController : MonoBehaviour
 		
 		GameObject startPlatform = CreateStartPlatform();
 		PlatformController platformController = startPlatform.GetComponent<PlatformController>();
-		platformController.AddDestinationReachedListener(() => EntityManager.GetPlayer().transform.position = startPlatform.transform.position + new Vector3(0,3,0));
+		
+		if(EntityManager.GetPlayer() != null)
+			platformController.AddDestinationReachedListener(() => {
+				EntityManager.GetPlayer().transform.position = startPlatform.transform.position + new Vector3(0,3,0);
+				groundGenerator.SpawnGroup(startPlatform.transform.position);
+			});
+		
 	}
 	
 	public void StartGeneration(){
