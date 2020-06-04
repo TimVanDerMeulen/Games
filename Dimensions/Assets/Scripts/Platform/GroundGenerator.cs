@@ -224,14 +224,10 @@ public class GroundGenerator {
 			}
 		}
 		
-		foreach(PlatformGroup pg in groups)
-			Debug.Log(pg.GetFreeSpacesCount());
-		
 		while(maxAmount > (maxFreeSpaces - availableSpacesToGroup.Count) && availableSpacesToGroup.Count > 0){
 			//TODO not do bs
 			Vector3 space = availableSpacesToGroup[0];
 			int randomGroupIndex = (int)(Random.value * groups.Count);
-			//Debug.Log(randomGroupIndex);
 			groups[randomGroupIndex].AddSpace(space);
 			availableSpacesToGroup.Remove(space);
 		}
