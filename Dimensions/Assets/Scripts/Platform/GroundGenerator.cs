@@ -324,9 +324,11 @@ public class GroundGenerator {
 		}
 		
 		public Vector3 GetRandomFreeSpace(){
-			int test = Random.Range(0, freeSpaces.Count);
-			Debug.Log(test);
-			return freeSpaces[test];
+			if(!HasFreeSpace())
+				throw new InvalidOperationException("No free space available in this group!");
+			
+			int index = Random.Range(0, freeSpaces.Count);
+			return freeSpaces[index];
 		}
 		
 		public void UseSpace(Vector3 space, GameObject platform){
