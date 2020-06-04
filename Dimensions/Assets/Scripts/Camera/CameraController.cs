@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
 	public Vector3 angle;
 	
 	private float currentDistance;
+	private Quaternion currentRotation = Quaternion.identity;
 	private bool shouldTurnCamera = false;
 	
 	private Renderer groundRenderer;
@@ -47,12 +48,12 @@ public class CameraController : MonoBehaviour
 	private void handleCameraTurn(Vector3 center){
 		if (shouldTurnCamera){
 			shouldTurnCamera = false;
-			transform.RotateAround(center, -Vector3.up, 90);
+			currentRotation *= Quaternion.Euler(0, 90, 0);
 		}
 	}
 	
 	private void centerCameraToGround(Vector3 center){
-		transform.position = center + angle * currentDistance;
+		transform.position = center + currentRotation * (angle * currentDistance);
 		transform.LookAt(player.transform);
 	}
 	
