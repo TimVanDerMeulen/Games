@@ -123,11 +123,11 @@ public class GroundGenerator {
 	}
 	
 	public GameObject GetRandomPlatform(){
-		return ((Random.value * 5 > 2) ? defaultCloud : allRandomPlatforms[(int)(Random.value * allRandomPlatforms.Count)]);
+		return (Random.Range(0, 5) > 2) ? defaultCloud : allRandomPlatforms[Random.Range(0, allRandomPlatforms.Count)];
 	}
 	
 	public Vector3 GetFreePlatformPosition(){
-		return platformGroups[(int)(Random.value * platformGroups.Count)].GetRandomFreeSpace();
+		return GetFreePlatformPosition(platformGroups);
 	}
 	
 	public bool HasFreeSpace(){
@@ -152,6 +152,20 @@ public class GroundGenerator {
 		}
 		if(updateMesh && this.updateNavMesh != null)
 			this.updateNavMesh();
+	}
+	
+	private Vector3 GetFreePlatformPosition(List<PlatformGroup> available){
+		if(available.Count == 0)
+			throw new InvalidOperationException("No free space available!");
+		
+		PlatformGroup pg = platformGroups[Random.Range(0, available.Count)];
+		if(pg.HasFreeSpace())
+			return pg.GetRandomFreeSpace();
+		
+		List<PlatformGroup> a = new List<PlatformGroup>();
+		a.AddRange(available);
+		a.Remove(pg);
+		return GetFreePlatformPosition(a);
 	}
 	
 	private void GenerateIfRateTimePassed(){
@@ -203,10 +217,10 @@ public class GroundGenerator {
 		for(float j=0;j<amountOfGroups;j++){
 			PlatformGroup pg = new PlatformGroup();
 			groups.Add(pg);
-			platformRisen.Add(pg, (Random.value * 1) < chanceToRisePlatform);
+			platformRisen.Add(pg, Random.value < chanceToRisePlatform);
 		
 			int size = 1;
-			Vector3 center = availableSpacesToGroup[(int)(Random.value * availableSpacesToGroup.Count)];
+			Vector3 center = availableSpacesToGroup[Random.Range(0, availableSpacesToGroup.Count)];
 			availableSpacesToGroup.Remove(center);
 			for(int i=0; i < availableSpacesToGroup.Count; i++){
 				if(maxBaseGroupSize <= size)
@@ -227,7 +241,7 @@ public class GroundGenerator {
 		while(maxAmount > (maxFreeSpaces - availableSpacesToGroup.Count) && availableSpacesToGroup.Count > 0){
 			//TODO not do bs
 			Vector3 space = availableSpacesToGroup[0];
-			int randomGroupIndex = (int)(Random.value * groups.Count);
+			int randomGroupIndex = Random.Range(0, groups.Count);
 			groups[randomGroupIndex].AddSpace(space);
 			availableSpacesToGroup.Remove(space);
 		}
@@ -310,7 +324,9 @@ public class GroundGenerator {
 		}
 		
 		public Vector3 GetRandomFreeSpace(){
-			return freeSpaces[(int)(Random.value * freeSpaces.Count)];
+			int test = Random.Range(0, freeSpaces.Count);
+			Debug.Log(test);
+			return freeSpaces[test];
 		}
 		
 		public void UseSpace(Vector3 space, GameObject platform){
