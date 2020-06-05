@@ -6,6 +6,7 @@
 **/ProjectSettings/
 **/Temp/
 **/obj/
+**/UIElementsSchema/
 **/Assets/*
 !**/Assets/Scenes/
 !**/Assets/Usable/
