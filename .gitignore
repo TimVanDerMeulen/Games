@@ -11,4 +11,5 @@
 !**/Assets/Usable/
 !**/Assets/Scripts/
 !**/Assets/Prefabs/
+!**/Assets/Editor/
 **/**/*.meta
