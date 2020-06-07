@@ -6,7 +6,6 @@ public class CameraController : MonoBehaviour
 {
 	[Header("Targets")]
 	public GameObject player;
-	public GameObject ground;
 	
 	[Header("Settings")]
 	public float maxDistance;
@@ -18,13 +17,11 @@ public class CameraController : MonoBehaviour
 	private Quaternion currentRotation = Quaternion.identity;
 	private bool shouldTurnCamera = false;
 	
-	private Renderer groundRenderer;
 	private Vector3 defaultViewDirection;
 	
 	private CameraMovement cameraMovement;
 	
     void Start(){
-         groundRenderer = ground.GetComponent<Renderer>();
 		 defaultViewDirection = transform.forward;
 		 
 		 currentDistance = minDistance;
