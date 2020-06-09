@@ -33,7 +33,7 @@ public class LookAroundCamera : CameraMovement
 	private void HandleInput(){
 		Quaternion turnHorizontal = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * settings.rotationSpeed, Vector3.up);
 		Quaternion turnVertical = Quaternion.AngleAxis(Input.GetAxis("Mouse Y") * settings.rotationSpeed * (-1), Vector3.right);
-		settings.cameraTransform.rotation = turnHorizontal * turnVertical * settings.cameraTransform.rotation;	
+		settings.cameraTransform.rotation = turnHorizontal * settings.cameraTransform.rotation * turnVertical;	
 	}
 	
 }

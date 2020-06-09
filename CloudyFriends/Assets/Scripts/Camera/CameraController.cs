@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-	[Header("Target")]
-	public GameObject player;
-	
 	[Header("Other Settings")]
 	public FollowCamera.Settings followCameraSettings;
 	public LookAroundCamera.Settings lookAroundCameraSettings;
 	
+	private GameObject player;
 	private List<CameraMovement> cameraMovements;
-	private CameraMovement thridPersonView;
-	private CameraMovement firstPersonView;
 	
     void Start(){
+		player = EntityManager.GetPlayer();
+		EntityManager.AddOnPlayerChangeAction(() => {
+				ResetPlayerSettings();
+				player = EntityManager.GetPlayer();
+				InitMovement();
+			});
+		
 		InitMovement();
 	}
 
@@ -31,27 +34,46 @@ public class CameraController : MonoBehaviour
 		
 		followCameraSettings.target = player.transform;	 
 		followCameraSettings.cameraTransform = transform;	 
-		thridPersonView = new FollowCamera(followCameraSettings);
-		cameraMovements.Add(thridPersonView);
+		cameraMovements.Add(new FollowCamera(followCameraSettings));
 		 
 		lookAroundCameraSettings.target = player.transform.Find("Head");	 
 		lookAroundCameraSettings.cameraTransform = transform;	
-		lookAroundCameraSettings.active = false;	
-		firstPersonView = new LookAroundCamera(lookAroundCameraSettings);
-		cameraMovements.Add(firstPersonView);
+		cameraMovements.Add(new LookAroundCamera(lookAroundCameraSettings));
+		
+		ChangeToCamera(followCameraSettings);
 	}
 	
 	private void HandleInput(){
 		if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
-			lookAroundCameraSettings.active = true;  			
-			followCameraSettings.active = false;  			
+			ChangeToCamera(lookAroundCameraSettings);		
+			RenderPlayer(false);	
+
+			// set first person view to head in prev view direction
+			var viewDirection = lookAroundCameraSettings.cameraTransform.forward;
+			viewDirection.y=0;
+			lookAroundCameraSettings.cameraTransform.rotation = Quaternion.LookRotation(viewDirection, Vector3.up);			
         }
 		if (Input.GetKeyUp(KeyCode.LeftAlt))
         {
-			lookAroundCameraSettings.active = false;  			
-			followCameraSettings.active = true;  
+			ChangeToCamera(followCameraSettings);  
+			RenderPlayer(true);
 		}
+	}
+	
+	private void RenderPlayer(bool render){
+		player.GetComponent<Renderer>().enabled = render;
+	}
+	
+	private void ResetPlayerSettings(){
+		RenderPlayer(true);
+	}
+	
+	private void ChangeToCamera(CameraMovement.Settings cameraSetting) {
+		followCameraSettings.active = false;
+		lookAroundCameraSettings.active = false;
+		
+		cameraSetting.active = true;
 	}
 	
 }

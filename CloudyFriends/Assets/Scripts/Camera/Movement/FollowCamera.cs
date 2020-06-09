@@ -61,7 +61,7 @@ public class FollowCamera : CameraMovement
 	private void TurnAroundCenter(Vector3 center){
 		if(turningCamera){
 			Quaternion turnHorizontal = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * settings.rotationSpeed, Vector3.up);
-			Quaternion turnVertical = Quaternion.AngleAxis(Input.GetAxis("Mouse Y") * settings.rotationSpeed * (-1), Vector3.right);
+			Quaternion turnVertical = Quaternion.AngleAxis(Input.GetAxis("Mouse Y") * settings.rotationSpeed, Vector3.right);
 			currentAngle = turnHorizontal * turnVertical * currentAngle;
 			
 			//currentRotation *= Quaternion.Euler(0, settings.rotationSpeed * Time.deltaTime, 0); 

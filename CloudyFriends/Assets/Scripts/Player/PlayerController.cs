@@ -1,29 +1,34 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour {
 	
-	private Camera camera;
-	private NavMeshAgent agent;
+	protected NavMeshAgent agent;
 		    
-	void Start() {		
-		camera = Camera.main;
-	
+	public virtual void Start() {			
 		agent = GetComponent<NavMeshAgent>();
 	}
 	
-	void Update() {
+	private Ray test;
+	
+	public virtual void Update() {
 		if (Input.GetMouseButtonDown(1)) {
 			RaycastHit hit;
-
-			Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+			
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			//Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 60f, true);
 			if (Physics.Raycast(ray, out hit)) {
-				agent.SetDestination(hit.point);
+				MoveTo(hit);
 				return;
 			}
 		}		
+	}
+	
+	protected virtual void MoveTo(RaycastHit hit) {
+		agent.SetDestination(hit.point);
 	}
 
 }

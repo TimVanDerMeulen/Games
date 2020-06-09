@@ -3,17 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class EntityManager : MonoBehaviour
 {
 	private static EntityManager INSTANCE;
 	
-	[Header("Player")]
-	public GameObject player;
+	[Serializable]
+	public class Settings {
+		[Header("Player")]
+		public GameObject startingPlayer;
+	}
 	
-	[Header("Mob Capacity")]
-	public int hostile; // TODO make use of mob caps
-	public int neutral;
-	public int friendly;
+	public Settings settings;
+	
+	//private 
+	
+	private GameObject player;
+	private List<Action> onPlayerChange = new List<Action>();
 	
 	private Dictionary<Type, List<GameObject>> mobs = new Dictionary<Type, List<GameObject>>();
 	
@@ -23,6 +29,14 @@ public class EntityManager : MonoBehaviour
 	
 	public static GameObject GetPlayer(){
 		return INSTANCE.player;
+	}
+	
+	public static void SetPlayer(GameObject p){
+		INSTANCE.SetPlayerInternal(p);
+	}
+	
+	public static void AddOnPlayerChangeAction(Action action){
+		INSTANCE.onPlayerChange.Add(action);
 	}
 	
 	public static GameObject TryToSpawnMob(GameObject mob, Vector3 pos) {
@@ -61,20 +75,32 @@ public class EntityManager : MonoBehaviour
 		return Instantiate(prefab, pos, Quaternion.identity);
 	}
 	
+	private void SetPlayerInternal(GameObject p){
+		if(p == player)
+			return;
+		
+		player = p;
+		
+		foreach(Action action in onPlayerChange)
+			action();
+	}
+	
 	/*
 		Internal Logic
 	*/
 	
-    void Start()
+    void Awake()
     {
 		if(INSTANCE != null)
 			throw new InvalidOperationException("EntityManager may only be created once!");
 		
 		INSTANCE = this;
+		player = settings.startingPlayer;
     }
 
     void Update()
     {
         //TODO maybe try to get rid of enimies etc. by making them jump off or die...
     }
+	
 }
