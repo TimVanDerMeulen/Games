@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FollowCamera : CameraMovement
 {
@@ -42,26 +43,41 @@ public class FollowCamera : CameraMovement
     protected override void PerformUpdate(){
 		Vector3 currentCenter = settings.target.position;
 		
-		HandleInput();
 		TurnAroundCenter(currentCenter);
 		CenterTarget(currentCenter);
 	}
+
+	protected override void OnActivate(){
+		InputController.GetInputManager().Camera.Rotate.performed += OnRotate;
+	}
+	protected override void OnDeactivate(){
+		InputController.GetInputManager().Camera.Rotate.performed -= OnRotate;
+	}
 	
-	private void HandleInput(){
-		if (Input.GetMouseButtonDown(1))
-        {
-			turningCamera = true;  			
-        }
-		if (Input.GetMouseButtonUp(1))
-        {
-			turningCamera = false;
-		}
+	private void OnRotate(InputAction.CallbackContext ctx){
+		// InputActionPhase phase = ctx.phase;
+		// switch (phase)
+        // {
+        //     case InputActionPhase.Started:
+		// 		turningCamera = true;
+		// 		break;
+        //     case InputActionPhase.Canceled:
+        //     case InputActionPhase.Performed:
+		// 	case InputActionPhase.Disabled:
+        //         turningCamera = false;
+        //         break;
+		// 	default:
+		// 		break;
+        // }
+		turningCamera = !turningCamera;
 	}
 	
 	private void TurnAroundCenter(Vector3 center){
 		if(turningCamera){
-			Quaternion turnHorizontal = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * settings.rotationSpeed, Vector3.up);
-			Quaternion turnVertical = Quaternion.AngleAxis(Input.GetAxis("Mouse Y") * settings.rotationSpeed, Vector3.right);
+			Vector2 cursorDelta = InputController.GetInputManager().Cursor.Movement.ReadValue<Vector2>();
+			cursorDelta *= Time.deltaTime;
+			Quaternion turnHorizontal = Quaternion.AngleAxis(cursorDelta.x * settings.rotationSpeed, Vector3.up);
+			Quaternion turnVertical = Quaternion.AngleAxis(cursorDelta.y * (-1) * settings.rotationSpeed, Vector3.right);
 			currentAngle = turnHorizontal * turnVertical * currentAngle;
 			
 			//currentRotation *= Quaternion.Euler(0, settings.rotationSpeed * Time.deltaTime, 0); 

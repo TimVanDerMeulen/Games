@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FriendsController : MonoBehaviour
 {
@@ -18,22 +19,29 @@ public class FriendsController : MonoBehaviour
         SetCurrentPlayer(EntityManager.GetPlayer());
 		currentPlayer.GetComponent<FriendController>().settings.active = true;
 		EntityManager.AddOnPlayerChangeAction(() => SetCurrentPlayer(EntityManager.GetPlayer()));
+
+		InputController.GetInputManager().Player.Interact.performed += CheckSwitchPlayer;
     }
 
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0)) {
-			RaycastHit hit;
+	// private void OnEnable(){
+	// 	InputController.GetInputManager().Player.Interact.performed += CheckSwitchPlayer;
+	// }
 
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			if (Physics.Raycast(ray, out hit)) {
-				GameObject hitObj = hit.transform.gameObject;
-				if(hitObj.GetComponent<FriendController>() != null && hitObj.GetComponent<FriendController>().settings.active){
-					SetCurrentPlayer(hitObj);
-				}
+	// private void OnDisable(){
+	// 	InputController.GetInputManager().Player.Interact.performed -= CheckSwitchPlayer;
+	// }
+
+	private void CheckSwitchPlayer(InputAction.CallbackContext ctx){
+		RaycastHit hit;
+
+		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+		if (Physics.Raycast(ray, out hit)) {
+			GameObject hitObj = hit.transform.gameObject;
+			if(hitObj.GetComponent<FriendController>() != null && hitObj.GetComponent<FriendController>().settings.active){
+				SetCurrentPlayer(hitObj);
 			}
-		}	
-    }
+		}
+	}
 	
 	private void SetCurrentPlayer(GameObject player){
 		if(currentPlayer != null)

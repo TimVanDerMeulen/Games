@@ -28,9 +28,11 @@ public class FriendController : PlayerController
 		
 		if(leader != null && passedTime > 1) {
 			passedTime = 0f;
-			transform.LookAt(leader);
+			
 			if(Vector3.Distance(leader.position, transform.position) > 1.5)
 				base.agent.SetDestination(leader.position);
+			else
+				transform.LookAt(leader);
 			return;
 		}
 	
@@ -39,6 +41,9 @@ public class FriendController : PlayerController
 	}
 	
 	protected override void MoveTo(RaycastHit hit) {
+		if(!settings.isCurrentPlayer)
+			return;
+
 		GameObject hitObject = hit.transform.gameObject;
 		if(hitObject.GetComponent<FriendController>() && hitObject.transform != transform){
 			leader = hitObject.transform;

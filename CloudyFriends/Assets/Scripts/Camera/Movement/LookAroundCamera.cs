@@ -21,6 +21,13 @@ public class LookAroundCamera : CameraMovement
     public LookAroundCamera(Settings settings) : base(settings){
 		this.settings = settings;
 	}
+
+	protected override void OnActivate(){
+		// set first person view to head in prev view direction
+		var viewDirection = settings.cameraTransform.forward;
+		viewDirection.y=0;
+		settings.cameraTransform.rotation = Quaternion.LookRotation(viewDirection, Vector3.up);
+	}
 	
     protected override void PerformUpdate(){
 		Vector3 position = settings.target.position;
@@ -31,8 +38,10 @@ public class LookAroundCamera : CameraMovement
 	}
 	
 	private void HandleInput(){
-		Quaternion turnHorizontal = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * settings.rotationSpeed, Vector3.up);
-		Quaternion turnVertical = Quaternion.AngleAxis(Input.GetAxis("Mouse Y") * settings.rotationSpeed * (-1), Vector3.right);
+		Vector2 cursorDelta = InputController.GetInputManager().Cursor.Movement.ReadValue<Vector2>();
+		cursorDelta *= Time.deltaTime;
+		Quaternion turnHorizontal = Quaternion.AngleAxis(cursorDelta.x * settings.rotationSpeed, Vector3.up);
+		Quaternion turnVertical = Quaternion.AngleAxis(cursorDelta.y * settings.rotationSpeed * (-1), Vector3.right);
 		settings.cameraTransform.rotation = turnHorizontal * settings.cameraTransform.rotation * turnVertical;	
 	}
 	

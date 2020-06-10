@@ -20,10 +20,12 @@ public class CameraController : MonoBehaviour
 			});
 		
 		InitMovement();
+
+		InputController.GetInputManager().Camera.ToggleMode.performed += ctx => ToggleCameraMode();
 	}
 
     void Update(){
-		HandleInput();
+		// HandleInput();
 		
 		foreach(CameraMovement movement in cameraMovements)
 			movement.Update();
@@ -43,30 +45,22 @@ public class CameraController : MonoBehaviour
 		ChangeToCamera(followCameraSettings);
 	}
 	
-	private void HandleInput(){
-		if (Input.GetKeyDown(KeyCode.LeftAlt))
-        {
-			ChangeToCamera(lookAroundCameraSettings);		
-			RenderPlayer(false);	
-
-			// set first person view to head in prev view direction
-			var viewDirection = lookAroundCameraSettings.cameraTransform.forward;
-			viewDirection.y=0;
-			lookAroundCameraSettings.cameraTransform.rotation = Quaternion.LookRotation(viewDirection, Vector3.up);			
-        }
-		if (Input.GetKeyUp(KeyCode.LeftAlt))
-        {
-			ChangeToCamera(followCameraSettings);  
-			RenderPlayer(true);
-		}
-	}
-	
 	private void RenderPlayer(bool render){
 		player.GetComponent<Renderer>().enabled = render;
 	}
 	
 	private void ResetPlayerSettings(){
 		RenderPlayer(true);
+	}
+
+	private void ToggleCameraMode(){
+		if(followCameraSettings.active){
+			ChangeToCamera(lookAroundCameraSettings);
+			RenderPlayer(false);
+		} else {
+			ChangeToCamera(followCameraSettings);
+			RenderPlayer(true);
+		}
 	}
 	
 	private void ChangeToCamera(CameraMovement.Settings cameraSetting) {
