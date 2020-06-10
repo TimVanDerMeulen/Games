@@ -15,7 +15,10 @@ public class HighLighterController : MonoBehaviour
     private List<HighlightedObject> highlightedObjects = new List<HighlightedObject>();
 
     void Update() {
-       RaycastHit hit;
+        if(!InputController.GetInputManager().Player.enabled)
+            return;
+
+        RaycastHit hit;
 		
 		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 		//Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 60f, true);

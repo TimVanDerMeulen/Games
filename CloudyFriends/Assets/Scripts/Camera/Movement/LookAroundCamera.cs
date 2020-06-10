@@ -27,6 +27,18 @@ public class LookAroundCamera : CameraMovement
 		var viewDirection = settings.cameraTransform.forward;
 		viewDirection.y=0;
 		settings.cameraTransform.rotation = Quaternion.LookRotation(viewDirection, Vector3.up);
+
+		Cursor.lockState = CursorLockMode.Locked;
+		InputController.GetInputManager().Player.Disable();
+		InputController.GetInputManager().Camera.Disable();
+		InputController.GetInputManager().Camera.ToggleMode.Enable();
+	}
+
+	protected override void OnDeactivate(){
+		Cursor.lockState = CursorLockMode.None;
+
+		InputController.GetInputManager().Player.Enable();
+		InputController.GetInputManager().Camera.Enable();
 	}
 	
     protected override void PerformUpdate(){
