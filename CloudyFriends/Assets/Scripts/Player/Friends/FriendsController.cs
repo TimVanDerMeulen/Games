@@ -20,7 +20,8 @@ public class FriendsController : MonoBehaviour
 		currentPlayer.GetComponent<FriendController>().settings.active = true;
 		EntityManager.AddOnPlayerChangeAction(() => SetCurrentPlayer(EntityManager.GetPlayer()));
 
-		InputController.GetInputManager().Player.Interact.performed += CheckSwitchPlayer;
+		InputController.GetInputManager().Player.Switch.performed += CheckSwitchPlayer;
+		InputController.GetInputManager().Player.Interact.performed += ctx => Debug.Log("Interact");
     }
 
 	// private void OnEnable(){

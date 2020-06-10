@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FriendController : PlayerController
+public class FriendController : PlayerController, Interactable
 {
 	[Serializable]
 	public class Settings {
@@ -28,7 +28,7 @@ public class FriendController : PlayerController
 		
 		if(leader != null && passedTime > 1) {
 			passedTime = 0f;
-			
+
 			if(Vector3.Distance(leader.position, transform.position) > 1.5)
 				base.agent.SetDestination(leader.position);
 			else
