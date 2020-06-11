@@ -7,13 +7,12 @@ public class LookAroundCamera : CameraMovement
 {
 	[Serializable]
 	public class Settings : CameraMovement.Settings {
+		[Header("First Person Settings")]
 		public float rotationSpeed;
 		
 		//	target transforms for movement
 		[HideInInspector]
 		public Transform target;
-		[HideInInspector]
-		public Transform cameraTransform;
 	}
 	
 	private Settings settings;
@@ -23,6 +22,8 @@ public class LookAroundCamera : CameraMovement
 	}
 
 	protected override void OnActivate(){
+		base.OnActivate();
+
 		// set first person view to head in prev view direction
 		var viewDirection = settings.cameraTransform.forward;
 		viewDirection.y=0;
@@ -35,6 +36,8 @@ public class LookAroundCamera : CameraMovement
 	}
 
 	protected override void OnDeactivate(){
+		base.OnDeactivate();
+
 		Cursor.lockState = CursorLockMode.None;
 
 		InputController.GetInputManager().Player.Enable();

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-	[Header("Other Settings")]
+	[Header("Movement Settings")]
 	public FollowCamera.Settings followCameraSettings;
 	public LookAroundCamera.Settings lookAroundCameraSettings;
 	
@@ -36,6 +36,7 @@ public class CameraController : MonoBehaviour
 		
 		followCameraSettings.target = player.transform;	 
 		followCameraSettings.cameraTransform = transform;	 
+		followCameraSettings.startingDistance = Vector3.Distance(player.transform.position, transform.position);
 		cameraMovements.Add(new FollowCamera(followCameraSettings));
 		 
 		lookAroundCameraSettings.target = player.transform.Find("Head");	 

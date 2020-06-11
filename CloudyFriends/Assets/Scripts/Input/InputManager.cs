@@ -260,7 +260,7 @@ public class @InputManager : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e3518ba4-7833-440a-bd14-b44eacd1bfd3"",
-                    ""path"": ""<Mouse>/scroll/x"",
+                    ""path"": ""<Mouse>/scroll/y"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",

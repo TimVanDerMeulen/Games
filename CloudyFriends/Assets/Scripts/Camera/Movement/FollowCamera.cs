@@ -4,43 +4,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FollowCamera : CameraMovement
+public class FollowCamera : ZoomableCameraMovement
 {
 	[Serializable]
-	public class Settings : CameraMovement.Settings {
-		[Header("Positioning")]
-		[Tooltip("Limit for zooming out")]
-		public float maxDistance;
-		[Tooltip("Limit for zooming in")]
-		public float minDistance;
+	public class Settings : ZoomableCameraMovement.Settings {
+		[Header("Rotation Settings")]
 		[Tooltip("The angle to the target when starting")]
 		public Vector3 defaultAngle;
 		
-		[Header("Turning")]
 		public float rotationSpeed;
-		
-		//	target transforms for movement
-		[HideInInspector]
-		public Transform target;
-		[HideInInspector]
-		public Transform cameraTransform;
 	}
 	
 	private Settings settings;
 
 	private Quaternion currentRotation = Quaternion.identity;	
-	private float currentDistance;
 	private Vector3 currentAngle;
 	
 	private bool turningCamera = false;
 		
 	public FollowCamera(Settings settings) : base(settings){
 		this.settings = settings;
-		
-		ResetDefaults();
+
+		AddDefaultRestoreAction(SetFollowDefaults);
+		SetFollowDefaults();
 	}
 	
     protected override void PerformUpdate(){
+		base.PerformUpdate();
+
 		Vector3 currentCenter = settings.target.position;
 		
 		TurnAroundCenter(currentCenter);
@@ -48,27 +39,16 @@ public class FollowCamera : CameraMovement
 	}
 
 	protected override void OnActivate(){
+		base.OnActivate();
+
 		InputController.GetInputManager().Camera.Rotate.performed += OnRotate;
 	}
 	protected override void OnDeactivate(){
+		base.OnDeactivate();
 		InputController.GetInputManager().Camera.Rotate.performed -= OnRotate;
 	}
 	
 	private void OnRotate(InputAction.CallbackContext ctx){
-		// InputActionPhase phase = ctx.phase;
-		// switch (phase)
-        // {
-        //     case InputActionPhase.Started:
-		// 		turningCamera = true;
-		// 		break;
-        //     case InputActionPhase.Canceled:
-        //     case InputActionPhase.Performed:
-		// 	case InputActionPhase.Disabled:
-        //         turningCamera = false;
-        //         break;
-		// 	default:
-		// 		break;
-        // }
 		turningCamera = !turningCamera;
 	}
 	
@@ -79,8 +59,6 @@ public class FollowCamera : CameraMovement
 			Quaternion turnHorizontal = Quaternion.AngleAxis(cursorDelta.x * settings.rotationSpeed, Vector3.up);
 			Quaternion turnVertical = Quaternion.AngleAxis(cursorDelta.y * (-1) * settings.rotationSpeed, Vector3.right);
 			currentAngle = turnHorizontal * turnVertical * currentAngle;
-			
-			//currentRotation *= Quaternion.Euler(0, settings.rotationSpeed * Time.deltaTime, 0); 
 		}
 	}
 	
@@ -88,9 +66,8 @@ public class FollowCamera : CameraMovement
 		settings.cameraTransform.position = center + currentRotation * (currentAngle * currentDistance);
 		settings.cameraTransform.LookAt(settings.target);
 	}
-	
-	private void ResetDefaults(){
-		this.currentDistance = this.settings.minDistance;
+
+	private void SetFollowDefaults(){
 		this.currentAngle = this.settings.defaultAngle;
 	}
 

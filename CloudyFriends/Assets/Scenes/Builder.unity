@@ -267,6 +267,49 @@ MonoBehaviour:
       type: 3}
     previewTransparency: 0.149
     previewActive: 0
+--- !u!1 &1408028917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1408028919}
+  - component: {fileID: 1408028918}
+  m_Layer: 0
+  m_Name: InputController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!114 &1408028918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408028917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5b90027086b2e44488af0653f326526, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1408028919
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408028917}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.25, y: 7.75, z: -4.533634}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1849931125
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,6 +321,7 @@ GameObject:
   - component: {fileID: 1849931128}
   - component: {fileID: 1849931127}
   - component: {fileID: 1849931126}
+  - component: {fileID: 1849931129}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -350,3 +394,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1849931129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849931125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3073b61a8232c184db0c64c8c4c37d57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings:
+    target: {fileID: 1370097317}
+    zoomSettings:
+      active: 1
+      cameraTransform: {fileID: 0}
+      target: {fileID: 0}
+      minDistance: 5
+      maxDistance: 40
+      startingDistance: 0
+      zoomSpeed: 10
