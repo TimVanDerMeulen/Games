@@ -17,6 +17,8 @@ public class HexFieldGenerator
 	
 	private Rect tileSize;
 	private List<Vector3> spaces;
+
+	private float rowOffset = 3f/4f;
 	
 	public HexFieldGenerator(Settings settings){
 		this.settings = settings;
@@ -46,19 +48,29 @@ public class HexFieldGenerator
 		
 		this.spaces = CalcAllPossibleSpaces();
     }
+
+	public Vector3 GetClosestHexCenter(Vector3 pos){
+		float diffX = pos.x % tileSize.width;
+		float diffY = pos.y % tileSize.height;
+		return GetCenterPosFor((int)((pos.y - diffY)/(tileSize.height * rowOffset) + ((diffY < 0) ? (-1) : 1)), (int)((pos.x - diffX)/tileSize.width + ((diffX < 0) ? (-1) : 1)));
+	}
 	
 	private List<Vector3> CalcAllPossibleSpaces(){
 		float amountX = settings.size.width / tileSize.width;
-		float amountZ = settings.size.height / (tileSize.height * 3/4);
-		
+		float amountZ = settings.size.height / (tileSize.height * rowOffset);
+
 		List<Vector3> availableSpaces = new List<Vector3>();
 		
-		for(float i=0;i<amountX;i++){
-			for(float e=0;e<amountZ;e++){
-				availableSpaces.Add(new Vector3(i * tileSize.width - (settings.size.width/2) + (e%2)*(tileSize.width / 2), 0, e * tileSize.height * 3/4 - (settings.size.height/2)));
+		for(int i=0;i<amountX;i++){
+			for(int e=0;e<amountZ;e++){
+				availableSpaces.Add(GetCenterPosFor(e, i));
 			}
 		}
 		return availableSpaces;
+	}
+
+	private Vector3 GetCenterPosFor(int row, int col){
+		return new Vector3(col * tileSize.width - (settings.size.width/2) + (row%2)*(tileSize.width / 2), 0, row * tileSize.height * rowOffset - (settings.size.height/2));
 	}
 	
 }
