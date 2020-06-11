@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,8 +16,6 @@ public class PlainGroundController : MonoBehaviour
 	public Settings settings;
 	
 	private HexFieldGenerator hexFieldGenerator;
-	
-	private List<GameObject> field;
 
     void Update()
     {
@@ -26,17 +25,12 @@ public class PlainGroundController : MonoBehaviour
 			if(hexFieldGenerator == null)
 				hexFieldGenerator = new HexFieldGenerator(settings);
 			
-			if(field != null && field.Count > 0)
-				foreach(GameObject obj in field)
-					DestroyImmediate(obj);
-			
 			List<Vector3> spaces = hexFieldGenerator.GetSpaces();
-			field = new List<GameObject>();
 			
+			Clear();
 			while(spaces.Count > 0){
 				Vector3 spawnPos = spaces[Random.Range(0, spaces.Count)];
 				GameObject hexField = EntityManager.CreateInstanceOf(settings.hex, spawnPos, settings.hex.transform.rotation, transform);
-				field.Add(hexField);
 				spaces.Remove(spawnPos);
 			}
 		}
@@ -45,6 +39,12 @@ public class PlainGroundController : MonoBehaviour
 	public void ReGenerate(){
 		hexFieldGenerator.Refresh();
 		settings.generate = true;
+	}
+
+	private void Clear(){
+		var children = transform.Cast<Transform>().ToList();
+		foreach(Transform t in children)
+			DestroyImmediate(t.gameObject);
 	}
 
 }
