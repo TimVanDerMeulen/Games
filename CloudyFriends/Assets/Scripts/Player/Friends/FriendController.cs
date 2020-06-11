@@ -53,5 +53,9 @@ public class FriendController : PlayerController, Interactable
 		}
 		base.MoveTo(hit);
 	}
+
+	public void interact(Interaction interaction){
+		
+	}
 	
 }
