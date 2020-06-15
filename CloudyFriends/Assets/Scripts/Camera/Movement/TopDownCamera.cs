@@ -3,27 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TopDownCamera : CameraMovement
+public class TopDownCamera : ZoomableCameraMovement
 {
     [Serializable]
-	public class Settings : CameraMovement.Settings {
-        public Transform target;
+	public class Settings : ZoomableCameraMovement.Settings {
 
-        public float minDistance;
-        public float maxDistance;
     }
 
     private Settings settings;
 
-    private float currentDistance;
-
     public TopDownCamera(Settings settings) : base(settings) {
         this.settings = settings;
-
-        currentDistance = settings.minDistance + (settings.maxDistance - settings.minDistance) / 2;
     }
 
     protected override void PerformUpdate(){
+        base.PerformUpdate();
+        
         Vector3 newPos = settings.target.position;
         newPos.y = currentDistance;
         settings.cameraTransform.position = newPos;

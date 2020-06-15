@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface Interactable {
-    void interact(Interaction interaction);
+    void Interact(Interaction interaction);
 }
