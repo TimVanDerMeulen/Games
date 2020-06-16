@@ -17,10 +17,13 @@ public class InteractionMenuController : MonoBehaviour
 
     public static void ShowInteractionMenu(Transform target, List<InteractableMenu.MenuOption> options, Action<InteractableMenu.MenuOption> onSelection)
     {
+        if (options.Count == 1)
+        {
+            onSelection(options[0]);
+            return;
+        }
+
         Debug.Log("Display Option Menu");
         //TODO do smth useful
-
-        foreach (InteractableMenu.MenuOption option in options)
-            onSelection(option);
     }
 }
