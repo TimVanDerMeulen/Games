@@ -40,8 +40,7 @@ public class HexFieldGenerator
 	
     public void Refresh()
     {
-		Renderer hexRenderer = settings.hex.GetComponent<Renderer>();
-        var bounds = hexRenderer.bounds.size;
+        var bounds = GameObjectUtil.GetBoundsWithParent(settings.hex).size;
 		tileSize = new Rect();
 		tileSize.width = bounds.x;
 		tileSize.height = bounds.z;

@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeverController : MonoBehaviour, Interactable
+public class LeverController : InteractableController
 {
     public bool state;
 
-    void Update()
+    public new void Awake()
     {
-        
+        base.Awake();
+
+        interactionMenu.AddMenuOption(InteractionType.USE, new InteractableMenu.MenuOption("Flip", interaction => { state = !state; }));
     }
 
-    public void Interact(Interaction interaction){
-        Debug.Log("Lever interact: " + interaction);
-    }
 }

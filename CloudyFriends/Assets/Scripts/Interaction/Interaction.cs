@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Interaction
+public class Interaction
 {
-    private GameObject source;
+    public GameObject source { get; private set; }
 
-    private InteractionType type;
+    public InteractionType type { get; private set; }
+
+    public Interaction(InteractionType type, GameObject source)
+    {
+        this.type = type;
+        this.source = source;
+    }
 }
