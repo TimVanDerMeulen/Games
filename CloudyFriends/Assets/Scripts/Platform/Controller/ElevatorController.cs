@@ -6,6 +6,8 @@ using UnityEngine.AI;
 
 public class ElevatorController : PlatformController
 {
+    public GameObject upIndicator, downIndicator;
+
     public float minHeight, maxHeight;
 
     public float movementSpeed;
@@ -38,6 +40,9 @@ public class ElevatorController : PlatformController
     {
         moveDown = down;
         moving = true;
+
+        upIndicator.active = !down;
+        downIndicator.active = down;
     }
 
     private void MoveToLimit(bool lowerLimit)

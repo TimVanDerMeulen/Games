@@ -20,6 +20,7 @@ public class LeverController : InteractableController
     {
         base.Awake();
 
+        interactionMenu.AddMenuOption(InteractionType.PLAYER, new InteractableMenu.MenuOption("Flip", interaction => Flip()));
         interactionMenu.AddMenuOption(InteractionType.USE, new InteractableMenu.MenuOption("Flip", interaction => Flip()));
 
         ShowState(defaultState);

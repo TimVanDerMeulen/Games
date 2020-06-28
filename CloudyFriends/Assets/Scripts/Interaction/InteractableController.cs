@@ -6,11 +6,13 @@ public class InteractableController : MonoBehaviour, Interactable
 {
     protected InteractableMenu interactionMenu;
 
-    public void Awake() {
+    public void Awake()
+    {
         interactionMenu = new InteractableMenu();
     }
 
-    public void Interact(Interaction interaction){
+    public void Interact(Interaction interaction)
+    {
         interactionMenu.Interact(interaction, transform);
     }
 }

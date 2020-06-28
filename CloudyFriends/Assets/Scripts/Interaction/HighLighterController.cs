@@ -10,27 +10,30 @@ public class HighLighterController : MonoBehaviour
 
     public float lastDuration;
 
-    private List<Type> types = new List<Type>() {typeof(Interactable)};
+    private List<Type> types = new List<Type>() { typeof(Interactable) };
 
     private List<HighlightedObject> highlightedObjects = new List<HighlightedObject>();
 
-    void Update() {
-        if(!InputController.GetInputManager().Player.enabled)
+    void Update()
+    {
+        if (!InputController.GetInputManager().Player.enabled)
             return;
 
         RaycastHit hit;
-		
-		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-		//Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 60f, true);
-		if (Physics.Raycast(ray, out hit)) 
-			foreach(Type t in types)
-                if(hit.transform.GetComponent(t) != null)
+
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        //Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 60f, true);
+        if (Physics.Raycast(ray, out hit))
+            foreach (Type t in types)
+                if (hit.transform.GetComponent(t) != null)
                     Register(hit);
-        
+
         List<HighlightedObject> temp = new List<HighlightedObject>(highlightedObjects);
-        foreach(HighlightedObject h in temp) {
+        foreach (HighlightedObject h in temp)
+        {
             h.UpdateTimeAlive();
-            if(h.GetTimeAlive() >= lastDuration) {
+            if (h.GetTimeAlive() >= lastDuration)
+            {
                 highlightedObjects.Remove(h);
                 h.ApplyPrevShader();
             }
@@ -38,12 +41,14 @@ public class HighLighterController : MonoBehaviour
 
     }
 
-    private void Register(RaycastHit hit){
+    private void Register(RaycastHit hit)
+    {
         Renderer renderer = hit.transform.GetComponent<Renderer>();
 
         List<HighlightedObject> temp = new List<HighlightedObject>(highlightedObjects);
-        foreach(HighlightedObject h in temp) 
-            if(h.IsTargetRenderer(renderer)){
+        foreach (HighlightedObject h in temp)
+            if (h.IsTargetRenderer(renderer))
+            {
                 h.ResetTimeAlive();
                 return;
             }
@@ -51,37 +56,44 @@ public class HighLighterController : MonoBehaviour
 
     }
 
-    private class HighlightedObject {
+    private class HighlightedObject
+    {
         private Renderer renderer;
 
         private float timeAlive = 0f;
 
         private Shader prevShader;
 
-        public HighlightedObject(Renderer renderer, Shader highlightShader){
+        public HighlightedObject(Renderer renderer, Shader highlightShader)
+        {
             this.renderer = renderer;
 
             prevShader = renderer.material.shader;
             renderer.material.shader = highlightShader;
         }
 
-        public float GetTimeAlive(){
+        public float GetTimeAlive()
+        {
             return timeAlive;
         }
 
-        public void UpdateTimeAlive(){
+        public void UpdateTimeAlive()
+        {
             timeAlive += Time.deltaTime;
         }
 
-        public void ApplyPrevShader(){
+        public void ApplyPrevShader()
+        {
             renderer.material.shader = prevShader;
         }
 
-        public bool IsTargetRenderer(Renderer renderer){
+        public bool IsTargetRenderer(Renderer renderer)
+        {
             return this.renderer == renderer;
         }
 
-        public void ResetTimeAlive(){
+        public void ResetTimeAlive()
+        {
             timeAlive = 0f;
         }
 

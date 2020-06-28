@@ -64,7 +64,7 @@ public class FriendsController : MonoBehaviour
                 interactable = hit.collider.transform.GetComponentInParent<Interactable>();
             if (interactable != null)
             {
-                Interaction interaction = new Interaction(InteractionType.USE, currentPlayer);
+                Interaction interaction = new Interaction(InteractionType.PLAYER, currentPlayer);
                 interactable.Interact(interaction);
             }
         });
