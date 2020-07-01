@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6402188113031680789
+--- !u!1001 &5419792131058944619
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 7819069754518033269, guid: 8d9fc9bd04e05bd45b52dec4f6783e15,
         type: 3}
       propertyPath: m_Name
-      value: TWall
+      value: HalfCornerWall
       objectReference: {fileID: 0}
     - target: {fileID: 6868619434488250120, guid: 8d9fc9bd04e05bd45b52dec4f6783e15,
         type: 3}
@@ -67,6 +67,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1345619060095489692, guid: 8d9fc9bd04e05bd45b52dec4f6783e15,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 4806724852269469085, guid: 8d9fc9bd04e05bd45b52dec4f6783e15,
         type: 3}
       propertyPath: m_Mesh
@@ -89,8 +94,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3640284579591089693, guid: 8d9fc9bd04e05bd45b52dec4f6783e15,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.05
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7105712810750326044, guid: 8d9fc9bd04e05bd45b52dec4f6783e15,
         type: 3}
@@ -114,8 +119,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1770465016762858660, guid: 8d9fc9bd04e05bd45b52dec4f6783e15,
         type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.015
+      objectReference: {fileID: 0}
+    - target: {fileID: 1770465016762858660, guid: 8d9fc9bd04e05bd45b52dec4f6783e15,
+        type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.115
+      value: 1.565
       objectReference: {fileID: 0}
     - target: {fileID: 440622922468698166, guid: 8d9fc9bd04e05bd45b52dec4f6783e15,
         type: 3}

@@ -16,7 +16,8 @@ public class PlayerSpawnController : MonoBehaviour
         player.transform.position = renderer.bounds.center;
         player.transform.rotation = transform.rotation;
 
-        gameObject.SetActive(false);
+        if (Application.isPlaying)
+            GameObjectUtil.Hide(gameObject);
     }
 
 }
