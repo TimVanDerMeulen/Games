@@ -3,27 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Random=UnityEngine.Random;
+using Random = UnityEngine.Random;
 
 public class GroundController : MonoBehaviour
 {
-	private NavMeshSurface navMeshSurface;
+    private NavMeshSurface navMeshSurface;
 
     void Start()
     {
-		navMeshSurface = GetComponent<NavMeshSurface>();
-		
-		UpdateNavMesh();
+        navMeshSurface = GetComponent<NavMeshSurface>();
+
+        UpdateNavMesh();
     }
 
     void Update()
     {
-		
+
     }
-	
-	public void UpdateNavMesh(){
-		navMeshSurface.BuildNavMesh();
-		//PlayerController.RefreshNavMeshAgent();	
-	}
+
+    public void UpdateNavMesh()
+    {
+        navMeshSurface.BuildNavMesh();
+        //PlayerController.RefreshNavMeshAgent();	
+    }
 
 }
