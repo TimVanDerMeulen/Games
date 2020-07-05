@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class Instruction : MonoBehaviour
 {
-    abstract void Apply();
+    //abstract void Apply();
 }

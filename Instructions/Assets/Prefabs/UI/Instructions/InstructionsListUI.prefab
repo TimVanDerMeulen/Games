@@ -112,7 +112,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -547, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3034319689089565131
 CanvasRenderer:
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f82a22a4caf72ff4384ce2d25323bbb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  addInstructionPrefab: {fileID: 0}
+  addInstructionPrefab: {fileID: 8124688116386453856}
 --- !u!114 &8133641696813377743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 5322129213336014841}
   - component: {fileID: 5493088818820592443}
   m_Layer: 5
-  m_Name: Button
+  m_Name: AddButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

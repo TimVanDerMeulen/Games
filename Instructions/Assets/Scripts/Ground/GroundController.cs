@@ -25,11 +25,18 @@ public class GroundController : MonoBehaviour
         UpdateNavMesh();
         SetupGround();
     }
-
+    private bool test = false;
     void Update()
     {
         if (currentPlatform == null)
             currentPlatform = GetPlayerSpawnerPlatform();
+        if (test)
+        {
+            test = false;
+            MovementResult res = TryMoveToNextPlatform(EntityManager.GetPlayer().transform.forward);
+            if (res.success)
+                EntityManager.GetPlayer().GetComponent<NavMeshAgent>().SetDestination(res.result.transform.position);
+        }
     }
 
     public void UpdateNavMesh()
@@ -44,10 +51,7 @@ public class GroundController : MonoBehaviour
 
     public void Test()
     {
-        MovementResult res = TryMoveToNextPlatform(EntityManager.GetPlayer().transform.forward);
-        Debug.Log("Moving results: " + res.success + ", " + res.result.transform.position);
-        if (res.success)
-            EntityManager.GetPlayer().GetComponent<NavMeshAgent>().SetDestination(res.result.transform.position);
+        test = true;
 
     }
 
@@ -61,7 +65,6 @@ public class GroundController : MonoBehaviour
             return new MovementResult(false, null); ;
 
         GameObject nextPlatform = ground[(int)nextPlatformIndex.x, (int)nextPlatformIndex.z];
-        Debug.Log(currentPlatform.IsConnectedTo(nextPlatform));
         if (!currentPlatform.IsConnectedTo(nextPlatform))
             return new MovementResult(false, nextPlatform);
 

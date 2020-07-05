@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0501ad9ed26de3444a9307ad79b4ab9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  basePlatform: {fileID: 0}
 --- !u!114 &144733960510233496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,12 +81,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 2
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 17
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
