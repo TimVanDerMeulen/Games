@@ -14,7 +14,9 @@ public class GroundController : MonoBehaviour
     private GameObject[,] ground;
 
     private PlatformController currentPlatform;
-    private GameObject player;
+
+    private float minXPos, minZPos;
+    private Vector3 basePlatformBounds;
 
     void Start()
     {
@@ -27,7 +29,7 @@ public class GroundController : MonoBehaviour
     void Update()
     {
         if (currentPlatform == null)
-            SetupPlayer();
+            currentPlatform = GetPlayerSpawnerPlatform();
     }
 
     public void UpdateNavMesh()
@@ -35,13 +37,57 @@ public class GroundController : MonoBehaviour
         navMeshSurface.BuildNavMesh();
     }
 
+    public GameObject GetCurrentPlatform()
+    {
+        return currentPlatform?.gameObject;
+    }
+
+    public void Test()
+    {
+        MovementResult res = TryMoveToNextPlatform(EntityManager.GetPlayer().transform.forward);
+        Debug.Log("Moving results: " + res.success + ", " + res.result.transform.position);
+        if (res.success)
+            EntityManager.GetPlayer().GetComponent<NavMeshAgent>().SetDestination(res.result.transform.position);
+
+    }
+
+    public MovementResult TryMoveToNextPlatform(Vector3 direction)
+    {
+        direction = GetClearDirectionFrom(direction);
+        var currentIndex = GroundIndexOf(currentPlatform.gameObject);
+        var nextPlatformIndex = new Vector3(currentIndex.x + direction.x, 0, currentIndex.z + direction.z);
+
+        if ((ground.GetLength(0) <= nextPlatformIndex.x || ground.GetLength(1) <= nextPlatformIndex.z) || ground[(int)nextPlatformIndex.x, (int)nextPlatformIndex.z] == null)
+            return new MovementResult(false, null); ;
+
+        GameObject nextPlatform = ground[(int)nextPlatformIndex.x, (int)nextPlatformIndex.z];
+        Debug.Log(currentPlatform.IsConnectedTo(nextPlatform));
+        if (!currentPlatform.IsConnectedTo(nextPlatform))
+            return new MovementResult(false, nextPlatform);
+
+        currentPlatform = nextPlatform.GetComponent<PlatformController>();
+        return new MovementResult(true, nextPlatform);
+    }
+
+    public class MovementResult
+    {
+        public bool success { get; private set; }
+        public GameObject result { get; private set; }
+
+        public MovementResult(bool success, GameObject result)
+        {
+            this.success = success;
+            this.result = result;
+        }
+    }
+
     private void SetupGround()
     {
-        var basePlatformBounds = GameObjectUtil.GetBoundsWithParent(basePlatform).size;
+        basePlatformBounds = GameObjectUtil.GetBoundsWithParent(basePlatform).size;
 
-        float minXPos = float.MaxValue;
+        minXPos = float.MaxValue;
         float maxXPos = float.MinValue;
-        float minZPos = float.MaxValue;
+        minZPos = float.MaxValue;
         float maxZPos = float.MinValue;
         foreach (Transform child in transform)
         {
@@ -61,16 +107,9 @@ public class GroundController : MonoBehaviour
         ground = new GameObject[xLength, zLength];
         foreach (Transform child in transform)
         {
-            int x = (int)((child.position.x - minXPos) / basePlatformBounds.x);
-            int z = (int)((child.position.z - minZPos) / basePlatformBounds.z);
-            ground[x, z] = child.gameObject;
+            Vector3 pos = GroundIndexOf(child.gameObject);
+            ground[(int)pos.x, (int)pos.z] = child.gameObject;
         }
-    }
-
-    private void SetupPlayer()
-    {
-        currentPlatform = GetPlayerSpawnerPlatform();
-        player = EntityManager.GetPlayer();
     }
 
     private PlatformController GetPlayerSpawnerPlatform()
@@ -82,6 +121,34 @@ public class GroundController : MonoBehaviour
         if (playerSpawner == null || playerSpawnerPlatform.Length < 1)
             throw new Exception("Player spawner has no platform parent!");
         return playerSpawnerPlatform[0];
+    }
+
+    private Vector3 GroundIndexOf(GameObject platform)
+    {
+        Vector3 pos = platform.transform.position;
+        int x = (int)((pos.x - minXPos) / basePlatformBounds.x);
+        int z = (int)((pos.z - minZPos) / basePlatformBounds.z);
+        return new Vector3(x, 0, z);
+    }
+
+    private Vector3 GetClearDirectionFrom(Vector3 direction)
+    {
+        if (direction == Vector3.zero)
+            return direction;
+
+        direction = direction.normalized;
+        Vector3 closest = direction;
+        float closestDistance = float.MaxValue;
+        foreach (Vector3 vector in new List<Vector3> { new Vector3(1, 0, 0), new Vector3(0, 0, 1), new Vector3(-1, 0, 0), new Vector3(0, 0, -1) })
+        {
+            float distance = Vector3.Distance(vector, direction);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = vector;
+            }
+        }
+        return closest;
     }
 
 }

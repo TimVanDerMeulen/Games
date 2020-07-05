@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThoughtsController : MonoBehaviour
+public class InstructionsController : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
