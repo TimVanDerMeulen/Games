@@ -1,0 +1,6 @@
+*.64
+
+projects/examples/
+**/.import/
+
+godot-cpp
