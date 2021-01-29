@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Apple.gdns" type="Script" id=1]
+[ext_resource path="res://res/images/apple.png" type="Texture" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 38.2811
+
+[node name="Apple" type="Area2D"]
+collision_layer = 32768
+collision_mask = 32
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1.05945, 3.17839 )
+z_index = -1
+shape = SubResource( 1 )
+
+[node name="Icon" type="Sprite" parent="."]
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+[connection signal="area_entered" from="." to="." method="area_entered"]

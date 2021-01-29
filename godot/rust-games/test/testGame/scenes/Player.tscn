@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/Player.gdns" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 30.4464, 30.2313 )
+
+[node name="Player" type="KinematicBody2D"]
+collision_layer = 1048575
+collision_mask = 1048575
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 1, 0 )
+current = true
+zoom = Vector2( 2, 2 )
+
+[node name="Icon" type="Sprite" parent="."]
+rotation = 1.5708
+z_index = 12
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
