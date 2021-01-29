@@ -1,20 +1,21 @@
 use gdnative::prelude::*;
 
 use crate::objects::collectables::apple::Apple;
-use crate::player::Player;
+use crate::mobs::enemies::*;
 use crate::environment::ground::ice::Ice;
 use crate::environment::ground::mud::Mud;
 use crate::environment::ground::magnet::Magnet;
 use crate::environment::ground::river::River;
 use crate::environment::ground::timed_chain::TimedChain;
+use crate::mobs::player::Player;
 
-mod player;
 mod interaction;
 mod objects;
 mod casting;
 mod environment;
 mod controls;
 mod globals;
+mod mobs;
 
 fn init(handle: InitHandle) {
     // ############ player #############

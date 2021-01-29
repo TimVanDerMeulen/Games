@@ -1,6 +1,6 @@
 use gdnative::api::Input;
 use gdnative::prelude::*;
-use crate::player::Player;
+use crate::mobs::player::Player;
 use crate::controls::movement::{BasicMovementStats, MovementController};
 
 pub struct PlayerMovementStats {

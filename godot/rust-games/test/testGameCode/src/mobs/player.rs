@@ -2,7 +2,7 @@ use gdnative::api::KinematicBody2D;
 use gdnative::prelude::*;
 
 use crate::interaction::Inventory;
-use crate::player::controls::movement::PlayerMovementStats;
+use crate::mobs::player::controls::movement::PlayerMovementStats;
 use crate::controls::movement::MovementController;
 
 mod controls;

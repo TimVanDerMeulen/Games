@@ -1,6 +1,6 @@
 use std::any::Any;
 
-use crate::player::Player;
+use crate::mobs::player::Player;
 use crate::interaction::{Interactable, InventoryManager, Collectable, CollectableType};
 use gdnative::prelude::*;
 

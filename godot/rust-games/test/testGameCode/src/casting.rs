@@ -1,7 +1,7 @@
 use gdnative::prelude::*;
 use gdnative::api::*;
 use crate::interaction::{InventoryManager, Interactable};
-use crate::player::Player;
+use crate::mobs::player::Player;
 use crate::controls::movement::MovementController;
 use crate::controls::actions::ActionController;
 
