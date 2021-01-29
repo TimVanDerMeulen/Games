@@ -16,3 +16,6 @@
 !**/Assets/Editor/
 !**/Assets/Music/
 **/**/*.meta
+
+**.zip
+godot/Godot_v3.2.3-stable_x11.64
