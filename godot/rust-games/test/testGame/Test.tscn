@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://scenes/River.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/Apple.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/Mud.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/Ice.tscn" type="PackedScene" id=6]
-[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/nodes/environment/River.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/nodes/mobs/Unity.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/nodes/objects/Apple.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/nodes/environment/Mud.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/nodes/environment/Ice.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/nodes/mobs/Player.tscn" type="PackedScene" id=7]
 [ext_resource path="res://res/images/test_game_ground.png" type="Texture" id=8]
 
 [node name="Node2D" type="Node2D"]
@@ -20,24 +21,24 @@ position = Vector2( 186.792, -3753.86 )
 
 [node name="River7" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -1694.14, -2886.71 )
-drag = 60.0
 direction = Vector2( 0, 1 )
+drag = 60.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River7"]
 polygon = PoolVector2Array( -390.323, 350.725, -356.382, 84.8528, -226.274, -107.48, 328.097, -147.078, 786.303, -45.2549, 1204.91, -67.8823, 1759.28, -254.556, 2381.54, -130.108, 861.106, 268.484 )
 
 [node name="River6" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -1075.8, -1986.61 )
-drag = 180.0
 direction = Vector2( -1, 0.5 )
+drag = 180.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River6"]
 polygon = PoolVector2Array( 1225.73, -374.778, 1065.96, -495.747, 546.873, -314.318, 616.923, -267.144, 421.835, -142.691, 277.2, -92.2371, 35.0222, -55.2377, -254.246, 1.94336, -395.517, 5.30688, -863.055, 240.758, -620.877, 439.209, -382.062, 294.575, 45.113, 146.578, 243.564, 62.4878, 583.287, -72.0557, 1007.1, -304.143 )
 
 [node name="River5" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -1803.63, -2294.34 )
-drag = 270.0
 direction = Vector2( 0, 1 )
+drag = 270.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River5"]
 polygon = PoolVector2Array( 384.434, -58.7332, 315.022, 74.751, 336.38, 614.026, 320.362, 832.94, -187.031, 959.775, -920.292, 1067.41, -624.705, 800.904, -373.755, 304.343, -286.869, -231.052, 9.46069, -464.524, 440.486, -419.626 )
@@ -52,8 +53,8 @@ polygon = PoolVector2Array( -215.182, 43.383, -215.182, 104.322, -195.865, 108.7
 [node name="River4" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -3590.47, -858.849 )
 scale = Vector2( 7.82686, 6.78147 )
-drag = 250.0
 direction = Vector2( -1, 1 )
+drag = 250.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River4"]
 position = Vector2( 30.2631, -2.97261 )
@@ -62,8 +63,8 @@ polygon = PoolVector2Array( -45.0726, -24.5241, -63.7455, -31.9556, -68.2528, -2
 [node name="River3" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -2950.43, -612.182 )
 scale = Vector2( 7.82686, 6.78147 )
-drag = 70.0
 direction = Vector2( -1, -0.5 )
+drag = 70.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River3"]
 position = Vector2( 42.4972, -57.223 )
@@ -71,8 +72,8 @@ polygon = PoolVector2Array( -22.9781, 53.9821, -125.56, 65.4386, -130.067, 75.84
 
 [node name="River2" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -4301.06, -148.531 )
-drag = 260.0
 direction = Vector2( -1, 1 )
+drag = 260.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River2"]
 position = Vector2( -665.238, 282.222 )
@@ -80,8 +81,8 @@ polygon = PoolVector2Array( -241.905, -141.111, 136.071, -201.587, 806.349, -801
 
 [node name="River" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -5904.15, 505.909 )
-drag = 260.0
 direction = Vector2( -1, 0 )
+drag = 260.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River"]
 position = Vector2( -917.223, -80.6349 )
@@ -102,24 +103,24 @@ polygon = PoolVector2Array( 2.45264, -364.197, 1146.46, -364.197, 949.913, -41.6
 
 [node name="River9" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -614.599, -2573.07 )
-drag = 260.0
 direction = Vector2( -1, 0 )
+drag = 260.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River9"]
 polygon = PoolVector2Array( 1709.59, -117.83, 509.008, -171.349, 125.992, -383.016, -740.834, -141.111, -947.359, 90.9529, -879.323, 388.294, -798.688, 205.606, -629.961, 231.825, 60.4762, 257.024, 745.873, 211.667 )
 
 [node name="River10" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -2297.59, -930.81 )
-drag = 120.0
 direction = Vector2( -0.5, 1 )
+drag = 120.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River10"]
 polygon = PoolVector2Array( 839.095, -737.386, 817.906, -508.542, 682.294, -169.514, 453.45, 127.135, 211.893, 283.936, -478.877, 169.514, -576.348, 93.2327, 63.5679, -76.2814, 360.218, -406.834 )
 
 [node name="River11" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( -2954.46, -769.771 )
-drag = 120.0
 direction = Vector2( -1, 0 )
+drag = 120.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/River11"]
 polygon = PoolVector2Array( 711.959, -228.844, 618.727, 25.4271, 118.66, 152.563, -695.008, 279.698, -500.066, 46.6163 )
@@ -135,3 +136,5 @@ position = Vector2( -6238.12, -3441.14 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Environment/Mountain"]
 polygon = PoolVector2Array( -564.011, 3725.9, -292.789, 3556.39, -343.643, 2590.16, -292.789, 1725.64, 29.2886, 979.775, 605.637, 200.01, 1402.35, -240.727, 2046.51, -427.193, 2826.27, -427.193, 3368.72, -511.949, 3690.79, -410.241, 4063.72, -444.144, 4606.17, -410.241, 4741.78, -478.047, -597.914, -494.998 )
+
+[node name="RigidBody2D" parent="." instance=ExtResource( 2 )]
